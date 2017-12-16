@@ -7,10 +7,12 @@ game.state.add('TitleScreen', TitleScreen);
 //adds the GameScreen object as a Phaser state to the game
 game.state.add('GameScreen', GameScreen);
 
+game.state.add('WinScreen', WinScreen);
+
 //add this new gameover screen state
 game.state.add('GameOverScreen', GameOverScreen);
+//add this winscreen state
 
-game.state.add('WinScreen', WinScreen);
 
 //to add more states
 //game.state.add('what the state will be named', the object that the state is contained within)
