@@ -3,6 +3,10 @@ var charaFacingRight = true;
 
 var background;
 var floors;
+var left=false;
+var right=false;
+var fire=false;
+var jump=false;
 
 
 var WinScreen = {
@@ -15,6 +19,9 @@ var WinScreen = {
         game.load.image('bg', 'assets/images/background.png', 1000, 100);
         game.load.image('mbl', 'assets/images/mario_bullet.png');
         game.load.image('tr', 'assets/images/trophy.jpg');
+        game.load.image('buttonjump', 'assets/images/up-button.png');
+        game.load.image('buttonleft', 'assets/images/left-button.png');
+        game.load.image('buttonright', 'assets/images/right-button.png');
     },
     create: function() {
        
@@ -57,7 +64,31 @@ var WinScreen = {
         
                 this.text = game.add.text(game.world.centerX-190, game.world.centerY-60, 'YOU WIN! GET YOUR PRIZE HERE ');
 
+        if (!game.device.desktop) {
+            buttonjump = game.add.button(880, 470, 'buttonjump', null, this, 0, 1, 0, 1);  //game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame
+            buttonjump.fixedToCamera = true;  //our buttons should stay on the same place  
+            buttonjump.events.onInputOut.add(function(){jump=false;});
+            buttonjump.events.onInputDown.add(function(){jump=true;});
+            buttonjump.events.onInputUp.add(function(){jump=false;});
+            buttonjump.width = 100;
+            buttonjump.height = 100;
 
+            buttonleft = game.add.button(0, 472, 'buttonleft', null, this, 0, 1, 0, 1);
+            buttonleft.fixedToCamera = true;
+            buttonleft.events.onInputOut.add(function(){left=false;});
+            buttonleft.events.onInputDown.add(function(){left=true;});
+            buttonleft.events.onInputUp.add(function(){left=false;});
+            buttonleft.width = 100;
+            buttonleft.height = 100;
+            
+            buttonright = game.add.button(160, 472, 'buttonright', null, this, 0, 1, 0, 1);
+            buttonright.fixedToCamera = true;
+            buttonright.events.onInputOut.add(function(){right=false;});
+            buttonright.events.onInputDown.add(function(){right=true;});
+            buttonright.events.onInputUp.add(function(){right=false;});
+            buttonright.width = 100;
+            buttonright.height = 100;
+        }
 
     },
     
@@ -74,12 +105,12 @@ var WinScreen = {
         floors.tilePosition.x += 2;
         }
         
-        if (this.wasd.right.isDown) {
+        if (this.wasd.right.isDown || right == true) {
             charaFacingRight = true;
             this.grg.body.velocity.x = 350;
             this.grg.anchor.setTo(.5,1);
             this.grg.scale.x = 1;
-        } else if (this.wasd.left.isDown) { //if the left arrow is pressed, move to the left
+        } else if (this.wasd.left.isDown || left == true) { //if the left arrow is pressed, move to the left
             charaFacingRight = false;
             this.grg.anchor.setTo(.5,1);
             this.grg.scale.x = -1;
@@ -92,6 +123,13 @@ var WinScreen = {
         
        
         if (this.wasd.up.isDown && game.time.now > this.jumpTimer) {
+            
+            this.grg.body.velocity.y = -850;
+            this.jumpTimer = game.time.now + 900;
+
+        }
+        
+        if (jump == true && game.time.now > this.jumpTimer) {
             
             this.grg.body.velocity.y = -850;
             this.jumpTimer = game.time.now + 900;
