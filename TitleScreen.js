@@ -1,3 +1,7 @@
+var full = false;
+var counter = 1;
+var buttonDown = false;
+
 //creates a TitleScreen object
 var TitleScreen = {
     
@@ -9,12 +13,18 @@ var TitleScreen = {
         //loads an image named 'start'   
         game.load.image('start1', 'assets/images/start1.png');
         game.load.image('bg' , 'assets/images/game_background.png' );
+        game.load.image('full', 'assets/images/full-screen.png');
+        
+        game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
+        game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
+        game.scale.refresh();
     },
     
     
     //the create method is run after the preload method
     //it is where we set up the basics of the game, essentially what it will look like when we start the game
     create: function () {
+        
         this.bg = game.add.image(0,0, 'bg');
         this.bg.width = game.world.width;
         this.bg.height = game.world.height;
@@ -28,7 +38,17 @@ var TitleScreen = {
         this.test = this.add.button(1100, game.world.centerY+50, 'start1', this.startGame, this);
         var style = {font: '80px Arial', fill:'#FFFFFF', align: 'center'};
         this.text = game.add.text(1100, game.world.centerY+100, 'Start');
-    
+        
+//        if (!game.device.desktop) {
+//        fullScreen = game.add.button(800, 400, 'full', null, this, 0, 1, 0, 1);
+//        fullScreen.height = 100;
+//        fullScreen.width = 100;
+//        fullScreen.events.onInputDown.add(function(){full=true;});
+        
+        
+            
+//        }
+        
         
         
         //makes the background color of the whole screen periwinkle
@@ -42,10 +62,21 @@ var TitleScreen = {
         if (this.chr.x > 500) {
             this.chr.x -= 20
         }
+           
+           
             
        }
     
     },
+    
+    fullScreen: function() {
+      if (game.scale.isFullScreen) {
+        game.scale.stopFullScreen();
+      } else {
+        game.scale.startFullScreen(false);
+      }
+    },
+
 
     //this is a method we created and named ourselves
     //it will only run when it is told to by some other method
